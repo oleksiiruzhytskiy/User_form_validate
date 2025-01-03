@@ -4,7 +4,7 @@ const app = express();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 app.use(cookieParser()); // Use cookie-parser middleware
-const SECRET_KEY = "your_secret_key"
+const SECRET_KEY = "your_secret_key";
 const cors = require("cors");
 app.use(
   cors({
@@ -29,7 +29,10 @@ app.post("/register", async (req, res) => {
 
     // Store username and hashed password in cookies (for demonstration only)
     res.cookie("username", user, { httpOnly: true, maxAge: 86400 * 1000 });
-    res.cookie("password", hashedPassword, { httpOnly: true, maxAge: 86400 * 1000 });
+    res.cookie("password", hashedPassword, {
+      httpOnly: true,
+      maxAge: 86400 * 1000,
+    });
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
@@ -38,6 +41,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
+const users = []
 app.post("/login", async (req, res) => {
   console.log("Request cookies:", req.cookies); // Все cookies
   const { user, password } = req.body;
@@ -61,12 +65,30 @@ app.post("/login", async (req, res) => {
     });
 
     // Respond with the token
-    res.status(200).json({ message: "User logged in", accessToken: accessToken });
+    res
+      .status(200)
+      .json({ message: "User logged in", accessToken: accessToken });
+
+      users.push({ username: user});
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).send("Server error");
   }
 });
+
+// Middleware to verify the access token and check if the user is logged in or not //
+app.get("/refresh", (req, res) => {
+  const { user } = req.body;
+  const accessToken = jwt.sign({ username: user }, SECRET_KEY, {
+    expiresIn: "1h", // Token expires in 1 hour
+  });
+  res.json({ accessToken: accessToken });
+});
+
+app.get("/users", (req, res) => {
+  console.log("Users get form /users:", users); // All users
+  res.json(users.map(user => ({ name: user.username })));
+})
 
 const PORT = 3001;
 app.listen(PORT, () => {

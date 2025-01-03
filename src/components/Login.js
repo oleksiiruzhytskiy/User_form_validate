@@ -1,11 +1,11 @@
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthProvider";
 import { LOGIN_URL } from "../api/urls";
 import axios from "../api/axios";
+import { useAuth } from "../hooks/useAuth";
 
 export const Login = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useAuth();
 
   const userRef = useRef();
   const errRef = useRef();
@@ -15,9 +15,7 @@ export const Login = () => {
   const [errMessage, setErrMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    // userRef.current.focus();
-  }, []);
+ 
 
   useEffect(() => {
     setErrMessage("");

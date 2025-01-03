@@ -1,7 +1,13 @@
-import axios from 'axios';
-import { BASE_URL } from './urls';
+import axios from "axios";
+import { BASE_URL } from "./urls";
 export default axios.create({
-    baseURL: BASE_URL,
-    timeout: 1000,
-    headers: {'X-Custom-Header': 'foobar'}
-  });
+  baseURL: BASE_URL,
+});
+
+export const axiosPrivate = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
