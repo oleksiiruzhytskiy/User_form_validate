@@ -64,7 +64,6 @@ export const Register = () => {
       setSuccess(true);
       if(response.status === 201) {
         setErrMessage("User registered successfully");
-        console.log("User registered successfully111");
       }
       setUser("");
       setPassword("");

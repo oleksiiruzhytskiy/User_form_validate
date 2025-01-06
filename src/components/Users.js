@@ -34,13 +34,13 @@ export const Users = () => {
 
   return (
     <article>
-      <h1>Users List</h1>
+      <h1>Users List :</h1>
       {users?.length > 0 ? (
-        <ul>
+        <ol>
           {users.map((user, i) => (
             <li key={i}>{user?.name}</li>
           ))}
-        </ul>
+        </ol>
       ) : (
         <p>No users to display</p>
       )}
